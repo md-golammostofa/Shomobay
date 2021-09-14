@@ -1,0 +1,104 @@
+﻿@model IEnumerable<HMSBO.ViewModels.VmSavings>
+@{ 
+    IEnumerable<HMSBO.ViewModels.VmLoanAdjustment> adjustments = (IEnumerable<HMSBO.ViewModels.VmLoanAdjustment>)ViewBag.Adjustmentlist;
+    var currentSave = (HMSBO.ViewModels.VmSavings)ViewBag.SaveAndAdjustmentAmount;
+    int sl = 0;
+    int sl2 = 0;
+}
+<div class="col-md-12">
+    <div class="row text-sm">
+        <div class="col-md-8" style="overflow-y:scroll">
+            <table class="table table-bordered table-sm table-striped" id="tblLoanDistributionList" >
+                <thead class="btn-success" style="background-color:#552eb3">
+                    <tr class="text-center">
+                        <th style="vertical-align:middle">#SL</th>
+                        <th style="vertical-align:middle">Member Code</th>
+                        <th style="vertical-align:middle">Member Name</th>
+                        <th style="vertical-align:middle">Save Amount</th>
+                        <th style="vertical-align:middle">Save Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        sl = sl + 1;
+                        string saveDate = item.SavingDate != null ? item.SavingDate.Value.ToString("dd-MMM-yyy") : "";
+                        <tr>
+                            <td class="text-center">@sl</td>
+                            <td>@item.MemberCode</td>
+                            <td>@item.MemberName</td>
+                            <td class="text-right">@item.SavingAmount</td>
+                            <td>@saveDate</td>
+                        </tr>
+                    }
+                    @if (Model.Count() == 0)
+                    {
+                        <tr class="text-center empty-row">
+                            <td colspan="15">
+                                No Rows Found
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <table class="table table-bordered table-sm table-striped" id="tblLoanDistributionList">
+                <thead class="btn-warning">
+                    <tr class="text-center">
+                        <th style="vertical-align:middle">#SL</th>
+                        <th style="vertical-align:middle">Member Code</th>
+                        <th style="vertical-align:middle">Member Name</th>
+                        <th style="vertical-align:middle">Adjust Amount</th>
+                        <th style="vertical-align:middle">Adjust Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in adjustments)
+                    {
+                        sl2 = sl2 + 1;
+                        string adjDate = item.AdjustmentDate != null ? item.AdjustmentDate.Value.ToString("dd-MMM-yyy") : "";
+                        <tr>
+                            <td class="text-center">@sl2</td>
+                            <td>@item.MemberCode</td>
+                            <td>@item.MemberName</td>
+                            <td class="text-right">@item.AdjustmentAmount</td>
+                            <td>@adjDate</td>
+                        </tr>
+                    }
+                    @if (adjustments.Count() == 0)
+                    {
+                        <tr class="text-center empty-row">
+                            <td colspan="15">
+                                No Rows Found
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-4">
+            <table class="table table-bordered table-sm table-striped" style="background-color:lightgoldenrodyellow">
+                <thead class="btn-primary">
+                    <tr>
+                        <th><b>Saving</b></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="color:blue">
+                        <th>Total Save</th>
+                        <th>@currentSave.TotalSavings</th>
+                    </tr>
+                    <tr style="color:blue">
+                        <th>Total Adjust</th>
+                        <th>@currentSave.TotalAdjust</th>
+                    </tr>
+
+                    <tr style="color:forestgreen">
+                        <th>Current Save</th>
+                        <th>@currentSave.CurrentSavings</th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

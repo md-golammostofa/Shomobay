@@ -1,0 +1,72 @@
+﻿@model IEnumerable<HMSBO.ViewModels.VmLoanDistribution>
+@{
+    Layout = null;
+    int sl = 0;
+    string badge = string.Empty;
+}
+<div class="col-md-12 text-sm" style="overflow-y:scroll">
+    <table class="table table-bordered table-sm table-striped" id="tblLoanDistributionList">
+        <thead class="btn-info" style="background-color:#552eb3">
+            <tr class="text-center">
+                <th style="vertical-align:middle">#SL</th>
+                <th class="hide"></th>
+                <th style="vertical-align:middle">Member Code</th>
+                <th style="vertical-align:middle">Member Name</th>
+                <th style="vertical-align:middle">Address</th>
+                <th style="vertical-align:middle">Mobile No</th>
+                <th style="vertical-align:middle">Loan Status</th>
+                <th style="vertical-align:middle">Loan Code</th>
+                <th style="vertical-align:middle">Loan Amount</th>
+                <th style="vertical-align:middle">Scheme</th>
+                <th style="vertical-align:middle">Net Payable</th>
+                <th style="vertical-align:middle">Daily Payable</th>
+                <th style="vertical-align:middle">Total Collection</th>
+                <th style="vertical-align:middle">Total Profit Collection</th>
+                <th style="vertical-align:middle">Total Principal Collection</th>
+                <th style="vertical-align:middle">Adjustment Amount</th>
+                <th style="vertical-align:middle">Remaining</th>
+                <th style="vertical-align:middle">Distribution Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                sl = sl + 1;
+                string disDate = item.EntryDate != null ? item.EntryDate.Value.ToString("dd-MMM-yyy") : "";
+                badge = item.LoanStatus == "Running" ? "badge bg-success" : "badge bg-danger";
+            <tr>
+                <td class="text-center">@sl</td>
+                <td class="hide">@item.LDisId</td>
+                <td>@item.MemberCode</td>
+                <td>@item.MemberName</td>
+                <td>@item.MemberAddress</td>
+                <td>@item.MemberMobile</td>
+                <td class="text-center" data-val="@item.LoanStatus">
+                    <span class="@badge" style="color:white">@item.LoanStatus</span>
+                </td>
+                <td>@item.LDisCode</td>
+                <td class="text-right">@item.LoanAmount</td>
+                <td class="text-center">@item.SkimName</td>
+                <td class="text-right">@item.NetPayable</td>
+                <td class="text-right">@item.DailyPayable</td>
+                <td class="text-right">@item.TotalCollection</td>
+                <td class="text-right">@item.TotalProfitAmount.ToString("0.00")</td>
+                <td class="text-right">@item.TotalPrincipalAmount.ToString("0.00")</td>
+                <td class="text-right">@item.AdjustmentAmount</td>
+                <td class="text-right">@item.NetDueAmount</td>
+                <td>@disDate</td>
+            </tr>
+            }
+            @if (Model.Count() == 0)
+            {
+                <tr class="text-center empty-row">
+                    <td colspan="15">
+                        No Rows Found
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+

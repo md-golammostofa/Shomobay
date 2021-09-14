@@ -1,0 +1,204 @@
+﻿
+@{
+    ViewBag.Title = "Loan Adjustment";
+}
+
+<div class="row">
+    <div class="col-md-12 text-center">
+        <div class="card card-gray shadow">
+            <div class="card-header">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-4 text-left">
+                            <a href="/Shomobay/LoanAdjustmentList" class="btn btn-sm btn-outline-primary" title="Back To List"><i class="fas fa-arrow-alt-circle-left"></i></a>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <h4><b>Savings Adjustment</b></h4>
+                        </div>
+                        <div class="col-md-4 hide">
+                            <button class="btn btn-outline-danger btn-sm float-lg-right" id="btnReset" title="RESET UI"><i class="fas fa-sync-alt"></i> </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow">
+            <div class="card-header">
+                @Html.AntiForgeryToken()
+                <div class="row text-sm">
+                    <div class="col-md-3">
+                        <label for="ddlLoanCode" class="control-label font-weight-bold">Loan Code</label>
+                        @Html.DropDownList("ddlLoanCode", (IEnumerable<SelectListItem>)ViewBag.ddlLoanCode, "--Select Code--", new { @class = "form-control form-control-sm select2 select2-danger" })
+                        <span class="error hide require-loanCode font-weight-bold">Code is required !</span>
+                    </div>
+                </div>
+                <hr />
+                <div class="row text-sm">
+                    <div class="col-md-12">
+                        <div class="row text-sm">
+                            <div class="col-md-3">
+                                <div class="form-group col-md-12">
+                                    <label for="txtMemberName" class="control-label font-weight-bold">Member Name</label>
+                                    <input type="text" name="Member" value="" id="txtMemberName" class="form-control form-control-sm search-control" disabled />
+                                    <span class="error hide require-memberName font-weight-bold">Member is required !</span>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group col-md-12">
+                                    <label for="txtMemberAddress" class="control-label font-weight-bold">Member Address</label>
+                                    <input type="text" name="Address" value="" id="txtMemberAddress" class="form-control form-control-sm search-control" disabled />
+                                    <span class="error hide require-Address font-weight-bold">Address is required !</span>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group col-md-12">
+                                    <label for="txtMemberMobile" class="control-label font-weight-bold">Member Mobile</label>
+                                    <input type="text" name="mobile" value="" id="txtMemberMobile" class="form-control form-control-sm search-control" disabled />
+                                    <span class="error hide require-Mobile font-weight-bold">Mobile is required !</span>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group col-md-12">
+                                    <label for="txtAdjustmentAmount" class="control-label font-weight-bold">Adjustment Amount</label>
+                                    <input type="number" name="amount" value="" id="txtAdjustmentAmount" class="form-control form-control-sm search-control" />
+                                    <span class="error hide require-adjustmentAmount font-weight-bold">Amount is required !</span>
+                                    <span class="error hide amount-Check font-weight-bold">Amount Is Over From Savings !</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group col-md-12">
+                                    <label for="dptAdjustmentDate" class="control-label font-weight-bold">Adjustment Date</label>
+                                    <input type="date" name="collectionDate" value="" id="dptAdjustmentDate" class="form-control form-control-sm search-control" />
+                                    <span class="error hide require-adjustmentDate font-weight-bold">Date is required !</span>
+                                    
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group col-md-12">
+                                    <label for="txtRemarks" class="control-label font-weight-bold">Remarks</label>
+                                    <input type="text" name="remarks" value="" id="txtRemarks" class="form-control form-control-sm search-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-2 text-right">
+                                <label for="" class="control-label font-weight-bold" style="visibility:hidden"> ddddddddddddddddd</label>
+                                <div class="clearfix">
+                                    <button type="submit" class="btn btn-sm btn-success float-lg-right mr-1" id="btnSubmit" title="Save"><i class="fas fa-plus"></i> Save</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script type="text/javascript">
+        var ddlLoanCode = $("#ddlLoanCode");
+        var txtMemberName = $("#txtMemberName");
+        var txtMemberAddress = $("#txtMemberAddress");
+        var txtMemberMobile = $("#txtMemberMobile");
+        var txtAdjustmentAmount = $("#txtAdjustmentAmount");
+        var dptAdjustmentDate = $("#dptAdjustmentDate");
+        var txtRemarks = $("#txtRemarks");
+
+        document.getElementById('dptAdjustmentDate').valueAsDate = new Date();
+
+        ddlLoanCode.change(function () {
+            $("#txtMemberName").val('');
+            $("#txtMemberAddress").val('');
+            $("#txtMemberMobile").val('');
+            if (ddlLoanCode.val() != "") {
+                $.when(postReqWithToken(dataType.applicationJson, dataType.json, 'POST', '/Shomobay/GetMemberInformation', JSON.stringify({ lcode: ddlLoanCode.val().trim() }), getToken())).then(function (res, status) {
+                    if (status == "success") {
+                        $("#txtMemberName").val(res.MemberName);
+                        $("#txtMemberAddress").val(res.MemberAddress);
+                        $("#txtMemberMobile").val(res.MemberMobile);
+                    }
+
+                }).fail(function (error) {
+                    consoleLog(error);
+                })
+            }
+
+        });
+
+        function validateInput() {
+            $('.error').addClass('hide');
+            var isValid = true;
+            if ($.trim(ddlLoanCode.val()) == "") {
+                $(".require-loanCode").removeClass("hide");
+                isValid = false;
+            }
+            if ($.trim(txtMemberName.val()) == "") {
+                $(".require-memberName").removeClass("hide");
+                isValid = false;
+            }
+            if ($.trim(txtMemberMobile.val()) == "") {
+                $(".require-Mobile").removeClass("hide");
+                isValid = false;
+            }
+            if ($.trim(txtMemberAddress.val()) == "") {
+                $(".require-Address").removeClass("hide");
+                isValid = false;
+            }
+            if (TryParseFloat(txtAdjustmentAmount.val(), 0) <= 0) {
+                $(".require-adjustmentAmount").removeClass("hide");
+                isValid = false;
+            }
+            else {
+                if (ajaxBooleanChecker(JSON.stringify({ lcode: ddlLoanCode.val(), amount: TryParseFloat(txtAdjustmentAmount.val(), 0) }), '/Shomobay/GetAdjAmountCheck', getToken()) == true) {
+                    $(".amount-Check").removeClass("hide");
+                    isValid = false;
+                }
+            }
+            if ($.trim(dptAdjustmentDate.val()) == "") {
+                $(".require-adjustmentDate").removeClass("hide");
+                isValid = false;
+            }
+            return isValid;
+        }
+
+        $("#btnSubmit").click(function (e) {
+            e.preventDefault();
+            $('.error').addClass('hide');
+            if (validateInput() == true) {
+                var loanadj = {
+                    LDisCode: ddlLoanCode.val(),
+                    MemberName: txtMemberName.val(),
+                    MemberAddress: txtMemberAddress.val(),
+                    MemberMobile: txtMemberMobile.val(),
+                    AdjustmentAmount: TryParseFloat(txtAdjustmentAmount.val(), 0),
+                    AdjustmentDate: dptAdjustmentDate.val(),
+                    Remarks: txtRemarks.val(),
+                    }
+                var data = JSON.stringify({ model: loanadj });
+                    //return console.log(data);
+                    $.when(postReqWithToken(dataType.applicationJson, dataType.json, 'POST', '/Shomobay/SaveLoanAdjustment', data, getToken())).then(function (res, status) {
+                        if (res == true) {
+                            alert(execuStatus.successSave);
+
+                                setTimeout(function () {
+                                    redirectPage('@Url.Action("LoanAdjustmentList")');
+                                }, 1000);
+                            }
+                            else {
+                            alert(execuStatus.fail);
+                            }
+                    }).fail(function (err) {
+                        alert(execuStatus.fail);
+                    })
+                }
+        });
+
+        function redirectPage(page) {
+            window.location.replace(page);
+        }
+    </script>
+    }

@@ -1,0 +1,73 @@
+﻿@model HMSBO.ViewModels.VmLoanDistribution
+@{ 
+    Layout = null;
+    string disDate = Model.EntryDate != null ? Model.EntryDate.Value.ToString("dd-MMM-yyy") : "";
+}
+<table class="table table-bordered table-sm table-striped" style="background-color:lightgoldenrodyellow">
+    <tbody>
+        <tr style="background-color:aquamarine">
+            <th></th>
+            <th>Loan Status</th>
+            @if (Model.LoanStatus == "Running")
+            {
+                <th style="color:forestgreen"><b>@Model.LoanStatus</b></th>
+            }
+            else
+            {
+                <th style="color:red"><b>@Model.LoanStatus</b></th>
+            }
+            <th></th>
+        </tr>
+        <tr>
+            <th>Member Code</th>
+            <th style="color:blue">@Model.MemberCode</th>
+            <th>Member Name</th>
+            <th style="color:blue">@Model.MemberName</th>
+        </tr>
+        <tr>
+            <th>Member Address</th>
+            <th style="color:blue">@Model.MemberAddress</th>
+            <th>Member Mobile</th>
+            <th style="color:blue">@Model.MemberMobile</th>
+        </tr>
+        <tr>
+            <th>Loan Code</th>
+            <th style="color:blue">@Model.LDisCode</th>
+            <th>Loan Distribution Date</th>
+            <th style="color:blue">@disDate</th>
+
+        </tr>
+
+        <tr>
+            <th>Loan Amount</th>
+            <th style="color:blue">@Model.LoanAmount</th>
+            <th>Net Payable Amount</th>
+            <th style="color:blue">@Model.NetPayable</th>
+
+        </tr>
+        <tr>
+            <th>Recover Days</th>
+            <th style="color:blue">@Model.TimeLimit</th>
+            <th>Daily Payable Amount</th>
+            <th style="color:blue">@Model.DailyPayable</th>
+        </tr>
+        <tr>
+            <th>Total Paid Amount</th>
+            <th style="color:blue">@Model.TotalCollection</th>
+            <th>Total Due Amount</th>
+            <th style="color:blue">@Model.DueLoanCollection</th>
+        </tr>
+        <tr>
+            <th>Paid Days</th>
+            <th style="color:blue">@Model.TotalPayDays</th>
+            <th>Remaining Days</th>
+            <th style="color:blue">@Model.TotalDueDays</th>
+        </tr>
+        <tr>
+            <th>Savings Adjustment Amount</th>
+            <th style="color:blue">@Model.AdjustmentAmount</th>
+            <th>Net Due Amount</th>
+            <th style="color:blue">@Model.NetDueAmount</th>
+        </tr>
+    </tbody>
+</table>

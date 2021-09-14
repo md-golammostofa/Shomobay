@@ -1,0 +1,51 @@
+﻿@model HMSBO.ViewModels.VmBalanceReport
+@{
+    ViewBag.Title = "Balance Report";
+}
+
+<div class="row">
+    <div class="col-md-12 text-center">
+        <div class="card card-gray shadow">
+            <div class="card-header card-gray">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-4">
+
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <h4><b>Balance Report</b></h4>
+                        </div>
+                        <div class="col-md-4">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 text-sm" style="overflow-y:scroll">
+        <table class="table table-bordered table-sm table-striped" id="tblLoanDistributionList">
+            <thead class="btn-warning" style="background-color:#552eb3">
+                <tr class="text-center">
+                    <th style="vertical-align:middle">Total Investment</th>
+                    <th style="vertical-align:middle">Total Distribution</th>
+                    <th style="vertical-align:middle">Total Collection</th>
+                    <th style="vertical-align:middle">Total Withdraw</th>
+                    <th style="vertical-align:middle">Balance</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-right">@Model.TotalInvest</td>
+                    <td class="text-right">@Model.TotalDistribution</td>
+                    <td class="text-right">@Model.TotalCollection</td>
+                    <td class="text-right">@Model.TotalWithdraw</td>
+                    <td class="text-right">@Model.Balance</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+

@@ -1,0 +1,150 @@
+﻿
+@{
+    ViewBag.Title = "Withdraw List";
+}
+
+<div class="row">
+    <div class="col-md-12 text-center">
+        <div class="card card-gray shadow">
+            <div class="card-header card-gray">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-4">
+
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <h4>Withdraw List</h4>
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-primary btn-sm float-right" id="btnAddNew"><i class="fa fa-plus"></i> Withdraw</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 text-sm" id="dataContainer">
+        @{Html.RenderAction("WithdrawList", new { flag = "view" });}
+    </div>
+</div>
+
+<div class="modal fade" id="modalWithdraw">
+    <div class="modal-dialog">
+        <div class="modal-content ">
+            <div class="modal-header  btn-success">
+                <h4 class="modal-title" id="modalHeading">Withdraw Balance</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <form id="frmInv" autocomplete="off">
+                <input type="hidden" id="hdfWithdrawId" value="0" />
+                @Html.AntiForgeryToken()
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label class="control-label col-md-12 font-weight-bold" for="">Withdraw Amount<span class="text-danger">*</span></label>
+                            <div class="col-md-12 input-group">
+                                <input type="number" id="txtWithdrawAmount" name="amount" class="form-control form-control-sm" />
+                            </div>
+                            <span class="error hide required-member">Amount is required !</span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label class="control-label col-md-12 font-weight-bold" for="">Remarks</label>
+                            <div class="col-md-12 input-group">
+                                <input type="text" id="txtRemarks" name="remarks" class="form-control form-control-sm" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-danger" id="btnCancel" title="Cancel the process"><i></i> Cancel </button>
+                        <button type="submit" id="btnSubmit" class="btn btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        var hdfWithdrawId = $("#hdfWithdrawId");
+        var txtWithdrawAmount = $("#txtWithdrawAmount");
+        var txtRemarks = $("#txtRemarks");
+
+        $("#btnCancel").click(function (e) {
+            e.preventDefault();
+            $("#modalMembers").modal("toggle");
+        })
+
+        function LoadDataTable() {
+            var data = { flag: "search"};
+
+            console.log(data);
+            $.when(getReqWithData('html', 'GET', '/Shomobay/WithdrawList', data)).then(function (res, status) {
+                console.log(status);
+                if (status === "success") {
+                    $("#dataContainer").fadeOut('500', function () {
+                        $("#dataContainer").empty();
+                        $("#dataContainer").append(res).fadeIn('500');
+                    });
+                }
+            }).fail(function (error) {
+                console.log(error);
+            })
+        }
+
+        function OpenModal() {
+            clrCtrl();
+            $(".error").addClass("hide");
+            $("#modalHeading").text('Withdraw Balance');
+            $("#btnSubmit").text('Save');
+            $("#modalWithdraw").modal();
+        }
+
+        $("#btnAddNew").click(function (e) {
+            e.preventDefault();
+            OpenModal();
+        })
+
+        function clrCtrl() {
+            txtWithdrawAmount.val('0');
+            hdfWithdrawId.val('0');
+            txtRemarks.val('');
+        }
+        function validation() {
+            var isValid = true;
+            $(".error").addClass('hide');
+            if (TryParseFloat(txtWithdrawAmount.val(), 0) <= 0) {
+                $(".require-loanAmount").removeClass("hide");
+                isValid = false;
+            }
+            return isValid;
+        }
+
+        $("#btnSubmit").click(function (e) {
+            e.preventDefault();
+            if (validation()) {
+                var id = hdfWithdrawId.val() == "" ? "0" : hdfWithdrawId.val();
+                var data = { WithdrawId: id, WithdrawAmount: txtWithdrawAmount.val(), Remarks: txtRemarks.val() };
+                data = JSON.stringify(data);
+                //return console.log(data);
+
+                $.when(postReqWithToken(dataType.applicationJson, dataType.json, 'POST', '/Shomobay/SaveWithdrawBalance', data, getToken())).then(function (res, status) {
+                    if (res) {
+                        clrCtrl();
+                        alert(execuStatus.successSave);
+                        $("#modalWithdraw").modal("toggle");
+                        LoadDataTable();
+                    }
+                    else {
+                        alert(execuStatus.fail);
+                    }
+                    //alert(res);
+                }).fail(function (err) {
+                    alert(execuStatus.fail);
+                })
+            }
+        })
+    </script>
+    }

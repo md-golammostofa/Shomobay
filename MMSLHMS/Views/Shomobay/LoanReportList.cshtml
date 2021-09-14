@@ -1,0 +1,135 @@
+﻿
+@{
+    ViewBag.Title = "Loan Report";
+}
+
+<div class="row">
+    <div class="col-md-12 text-center">
+        <div class="card card-gray shadow">
+            <div class="card-header card-gray">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-4">
+
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <h4><b>Loan Report</b></h4>
+                        </div>
+                        <div class="col-md-4">
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-12">
+                @using (Html.BeginForm("LoanDetailsReport", "Shomobay", FormMethod.Get, new { @target = "_blank" }))
+                {
+                    <form id="Loanreport" method="get">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group col-md-12">
+                                        <label for="txtMemberCode" class="control-label font-weight-bold">Member Code</label>
+                                        <input type="text" name="mCode" value="" id="txtMemberCode" placeholder="Search By Code" class="form-control form-control-sm search-control" />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group col-md-12">
+                                        <label for="txtLoanCode" class="control-label font-weight-bold">Loan Code</label>
+                                        <input type="text" name="lCode" value="" id="txtLoanCode" placeholder="Search By Loan" class="form-control form-control-sm search-control" />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group col-md-12">
+                                        <label for="txtMemberName" class="control-label font-weight-bold">Member Name</label>
+                                        <input type="text" name="mName" value="" id="txtMemberName" placeholder="Search By Member" class="form-control form-control-sm search-control" />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group col-md-12">
+                                        <label for="txtMemberMobile" class="control-label font-weight-bold">Member Mobile</label>
+                                        <input type="text" name="mMobile" value="" id="txtMemberMobile" placeholder="Search By Mobile" class="form-control form-control-sm search-control" />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group col-md-12">
+                                        <label for="ddlLoanStatus" class="control-label font-weight-bold">Loan Status</label>
+                                        <select id="ddlLoanStatus" name="status" class="form-control form-control-sm search-control">
+                                            <option value="">--Selecet One--</option>
+                                            <option value="Running">Running</option>
+                                            <option value="Close">Close</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-1" id="divReportType">
+                                    <label class="control-label font-weight-bold" for="rptType">Type</label>
+                                    <select name="rptType" id="rptType" class="form-control form-control-sm">
+                                        <option value="PDF">PDF</option>
+                                        <option value="EXCEL">EXCEL</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-1" id="divbtnReport">
+                                    <label class="control-label font-weight-bold" for="Download" style="visibility:hidden">Download</label>
+                                    <button type="submit" title="Download Loan Report" class="btn btn-sm btn-outline-danger"><i class="fas fa-file-pdf"> </i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 text-sm" id="dataContainer">
+        @{Html.RenderAction("LoanReportList", new { flag = "view" });}
+    </div>
+</div>
+@section Scripts{
+    <script type="text/javascript">
+        var txtMemberCode = $("#txtMemberCode");
+        var txtLoanCode = $("#txtLoanCode");
+        var txtMemberName = $("#txtMemberName");
+        var txtMemberMobile = $("#txtMemberMobile");
+        var ddlLoanStatus = $("#ddlLoanStatus");
+
+
+        txtMemberCode.keyup(function () {
+            LoadDataTable();
+        })
+
+        txtLoanCode.keyup(function () {
+            LoadDataTable();
+        })
+        txtMemberName.keyup(function () {
+            LoadDataTable();
+        })
+        txtMemberMobile.keyup(function () {
+            LoadDataTable();
+        })
+        ddlLoanStatus.change(function () {
+            LoadDataTable();
+        })
+        function LoadDataTable() {
+            var data = { flag: "search", mCode: txtMemberCode.val().trim(), lCode: txtLoanCode.val().trim(), mName: txtMemberName.val().trim(), mMobile: txtMemberMobile.val().trim(), status: ddlLoanStatus.val() };
+
+            //return console.log(data);
+            $.when(getReqWithData('html', 'GET', '/Shomobay/LoanReportList', data)).then(function (res, status) {
+                console.log(status);
+                if (status === "success") {
+                    $("#dataContainer").fadeOut('500', function () {
+                        $("#dataContainer").empty();
+                        $("#dataContainer").append(res).fadeIn('500');
+                    });
+                }
+            }).fail(function (error) {
+                console.log(error);
+            });
+        }
+    </script>
+    }

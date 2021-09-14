@@ -1,0 +1,147 @@
+﻿
+@{
+    ViewBag.Title = "Money Collection";
+}
+
+<div class="row">
+    <div class="col-md-12 text-center">
+        <div class="card card-gray shadow">
+            <div class="card-header">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-3 text-left">
+                            <a href="/Shomobay/MoneyCollectionList" class="btn btn-sm btn-outline-primary" title="Back To List"><i class="fas fa-arrow-alt-circle-left"></i></a>
+                        </div>
+                        <div class="col-md-6 text-center">
+                            <h4><b>Money Collection And Savings</b></h4>
+                        </div>
+                        <div class="col-md-3 hide">
+                            <button class="btn btn-outline-danger btn-sm float-lg-right" id="btnReset" title="RESET UI"><i class="fas fa-sync-alt"></i> </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 text-center">
+        <div class="card shadow">
+            <div class="card card-body">
+                <div class="row text-sm">
+                    <div class="col-md-3">
+                        <div class="form-group col-md-12">
+                            <label for="ddlMemberCode" class="control-label font-weight-bold">Member Code</label>
+                            @Html.DropDownList("ddlMemberCode", (IEnumerable<SelectListItem>)ViewBag.ddlMemberCode, "--Select Code--", new { @class = "form-control form-control-sm select2 select2-danger" })
+                            <span class="error hide require-memberCode font-weight-bold">Member Code is required !</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-9 text-sm" id="dataContainer">
+        @*@{Html.RenderAction("CrateMoneyCollection2", new { flag = "view" });}*@
+    </div>
+    <div class="col-md-3">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header gray-dark" style="background-color:#552eb3">
+                        <h5 style="color:white">Savings</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group col-md-12">
+                    <label for="txtSavingsAmount" class="control-label font-weight-bold">Savings Amount</label>
+                    <input type="number" name="amount" value="" id="txtSavingsAmount" class="form-control form-control-sm search-control" />
+                    <span class="error hide require-savingsAmount font-weight-bold">Amount is required !</span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group col-md-12">
+                    @*<label for="" class="control-label font-weight-bold" style="visibility:hidden"> Add</label>*@
+                    <div class="clearfix">
+                        <button type="submit" class="btn btn-sm btn-primary float-lg-right mr-1" id="btnSubmit" title="Save"><i class="fas fa-plus"></i> Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script type="text/javascript">
+        var ddlMemberCode = $("#ddlMemberCode");
+        var txtSavingsAmount = $("#txtSavingsAmount");
+
+        ddlMemberCode.change(function () {
+            LoadDataTable();
+        });
+        function LoadDataTable() {
+            var data = { flag: "search", mCode: ddlMemberCode.val().trim() };
+
+            //return console.log(data);
+            $.when(getReqWithData('html', 'GET', '/Shomobay/CrateMoneyCollection2', data)).then(function (res, status) {
+                console.log(status);
+                if (status === "success") {
+                    $("#dataContainer").fadeOut('500', function () {
+                        $("#dataContainer").empty();
+                        $("#dataContainer").append(res).fadeIn('500');
+                    });
+                }
+            }).fail(function (error) {
+                console.log(error);
+            })
+        }
+
+
+        function validateInput() {
+            $('.error').addClass('hide');
+            var isValid = true;
+            if ($.trim(ddlMemberCode.val()) == "") {
+                $(".require-memberCode").removeClass("hide");
+                isValid = false;
+            }
+            //if (TryParseFloat(txtCollectionAmount.val(), 0) <= 0) {
+            //    $(".require-collectionAmount").removeClass("hide");
+            //    isValid = false;
+            //}
+            return isValid;
+        }
+
+
+        $("#btnSubmit").click(function (e) {
+            e.preventDefault();
+            $('.error').addClass('hide');
+            if (validateInput() == true) {
+
+            var collectionloan = []; collectionloan.length = 0;
+                $.each($(".tblMoneyCollection tbody tr"), function (index, item) {
+                var tds = $(this).children('td');
+                collectionloan.push({
+                    LDisCode: tds.eq(3).html(),
+                    MCAmount: tds.eq(6).children('input[type="number"]').val(),
+                })
+                })
+                var data = JSON.stringify({ model: collectionloan, savings: TryParseFloat(txtSavingsAmount.val(), 0), mCode: ddlMemberCode.val(), });
+                //return console.log(data);
+                $.when(postReqWithToken(dataType.applicationJson, dataType.json, 'POST', '/Shomobay/SaveMoneyCollectionDaily', data, getToken())).then(function (res, status) {
+                        if (res == true) {
+                            alert(execuStatus.successSave);
+
+                                setTimeout(function () {
+                                    redirectPage('@Url.Action("MoneyCollectionList")');
+                                }, 1000);
+                            }
+                            else {
+                            alert(execuStatus.fail);
+                            }
+                    }).fail(function (err) {
+                        alert(execuStatus.fail);
+                    })
+            }
+        })
+        function redirectPage(page) {
+            window.location.replace(page);
+        }
+    </script>
+    }

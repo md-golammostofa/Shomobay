@@ -1,0 +1,163 @@
+﻿
+@{
+    ViewBag.Title = "Investment";
+}
+
+<div class="row">
+    <div class="col-md-12 text-center">
+        <div class="card card-gray shadow">
+            <div class="card-header card-gray">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-4">
+
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <h4><b>Investment List</b></h4>
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-primary btn-sm float-right" id="btnAddNew"><i class="fa fa-plus"></i> Create New Investment</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="card">
+            <div class="row">
+
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 text-sm" id="dataContainer">
+        @{Html.RenderAction("InvestmentList", new { flag = "view" });}
+    </div>
+</div>
+
+
+<div class="modal fade" id="modalInvestment">
+    <div class="modal-dialog">
+        <div class="modal-content ">
+            <div class="modal-header  btn-success">
+                <h4 class="modal-title" id="modalHeading">Create New Investment</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <form id="frmInv" autocomplete="off">
+                <input type="hidden" id="hdfInvestmentId" value="0" />
+                @Html.AntiForgeryToken()
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label class="control-label col-md-12 font-weight-bold" for="">Investment Amount<span class="text-danger">*</span></label>
+                            <div class="col-md-12 input-group">
+                                <input type="number" id="txtInvestmentAmount" name="Amount" class="form-control form-control-sm" />
+                            </div>
+                            <span class="error hide required-Amount">Investment Amount is required !</span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label class="control-label col-md-12 font-weight-bold" for="">Remarks</label>
+                            <div class="col-md-12 input-group">
+                                <input type="text" id="txtRemarks" name="remarks" class="form-control form-control-sm" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-danger" id="btnCancel" title="Cancel the process"><i></i> Cancel </button>
+                        <button type="submit" id="btnSubmit" class="btn btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+
+        var hdfInvestmentId = $("#hdfInvestmentId");
+        var txtInvestmentAmount = $("#txtInvestmentAmount");
+        var txtRemarks = $("#txtRemarks");
+
+        $("#btnCancel").click(function (e) {
+            e.preventDefault();
+            $("#modalInvestment").modal("toggle");
+        })
+
+        function LoadDataTable() {
+            var data = { flag: "search", };
+
+            console.log(data);
+            $.when(getReqWithData('html', 'GET', '/Shomobay/InvestmentList', data)).then(function (res, status) {
+                console.log(status);
+                if (status === "success") {
+                    $("#dataContainer").fadeOut('500', function () {
+                        $("#dataContainer").empty();
+                        $("#dataContainer").append(res).fadeIn('500');
+                    });
+                }
+            }).fail(function (error) {
+                console.log(error);
+            })
+        }
+
+        function OpenModal() {
+            clrCtrl();
+            $(".error").addClass("hide");
+            $("#modalHeading").text('Add New Investment');
+            $("#btnSubmit").text('Save');
+            $("#modalInvestment").modal();
+        }
+
+        $("#btnAddNew").click(function (e) {
+            e.preventDefault();
+            OpenModal();
+        })
+
+        function clrCtrl() {
+            txtInvestmentAmount.val('0');
+            txtRemarks.val('');
+            hdfInvestmentId.val('0')
+        }
+
+        function validation() {
+            var isValid = true;
+            $(".error").addClass('hide');
+            if (TryParseFloat(txtInvestmentAmount.val(),0) <= 0) {
+                isValid = false;
+                $(".required-Amount").removeClass("hide");
+            }
+            return isValid;
+        }
+
+        $("#btnSubmit").click(function (e) {
+            e.preventDefault();
+            if (validation()) {
+                var id = hdfInvestmentId.val() == "" ? "0" : hdfInvestmentId.val();
+                var data = { InvestmentId: id, InvestAmount: TryParseFloat(txtInvestmentAmount.val(), 0), Remarks: txtRemarks.val() };
+                data = JSON.stringify(data);
+                //return console.log(data);
+
+                $.when(postReqWithToken(dataType.applicationJson, dataType.json, 'POST', '/Shomobay/SaveInvestment', data, getToken())).then(function (res, status) {
+                    if (res) {
+                        clrCtrl();
+                        alert(execuStatus.successSave);
+                        $("#modalInvestment").modal("toggle");
+                        LoadDataTable();
+                    }
+                    else {
+                        alert(execuStatus.fail);
+                    }
+                    //alert(res);
+                }).fail(function (err) {
+                    alert(execuStatus.fail);
+                })
+            }
+        })
+    </script>
+}

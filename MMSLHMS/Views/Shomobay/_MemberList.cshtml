@@ -1,0 +1,71 @@
+﻿@model IEnumerable<HMSBO.ViewModels.VmMember>
+@{ 
+    Layout = null;
+    int sl = 0;
+    string badge = string.Empty;
+}
+<div class="col-md-12 text-sm" style="overflow-y:scroll">
+    <table class="table table-bordered table-sm table-striped" id="tblMembers">
+        <thead class="btn-info" style="background-color:#552eb3">
+            <tr class="text-center">
+                <th style="vertical-align:middle">#SL</th>
+                <th class="hide"></th>
+                <th style="vertical-align:middle">Member Code</th>
+                <th style="vertical-align:middle">Member Name</th>
+                <th style="vertical-align:middle">Address</th>
+                <th style="vertical-align:middle">Mobile No</th>
+                <th style="vertical-align:middle">NID No.</th>
+                <th style="vertical-align:middle">Status</th>
+                <th style="vertical-align:middle">Remarks</th>
+                <th style="vertical-align:middle">Entry Date</th>
+                <th style="vertical-align:middle">Entry User</th>
+                <th>Member Image</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                sl = sl + 1;
+                string entryDate = item.EntryDate != null ? item.EntryDate.Value.ToString("dd-MMM-yyy") : "";
+                badge = item.MemberStatus == "Active" ? "badge bg-success" : "badge bg-danger";
+            <tr>
+                <td class="text-center">@sl</td>
+                <td class="hide">@item.MemberId</td>
+                <td>@item.MemberCode</td>
+                <td>@item.MemberName</td>
+                <td>@item.MemberAddress</td>
+                <td>@item.MemberMobile</td>
+                <td>@item.NIDNumber</td>
+                <td class="text-center" data-val="@item.MemberStatus">
+                    <span class="@badge" style="color:white">@item.MemberStatus</span>
+                </td>
+                <td>@item.Remarks</td>
+                <td>@entryDate</td>
+                <td>@item.EntryUser</td>
+                <td class="text-center">
+                    <a href="#" class="btn btn-sm btn-outline-secondary data-item-view" data-item-view="@item.MemberId" title="View Member Image">
+                        <i class="fas fa-image"></i>
+                    </a>
+                </td>
+                <td class="text-center">
+                    @if (item.MemberStatus == "Active")
+                    {
+                        <a href="#" class="btn btn-sm btn-outline-warning data-item-edit" data-item-edit="@item.MemberId" title="Update Member Status">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                    }
+                </td>
+            </tr>
+            }
+            @if (Model.Count() == 0)
+            {
+                <tr class="text-center empty-row">
+                    <td colspan="8">
+                        No Rows Found
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,43 @@
+﻿@model IEnumerable<HMSBO.ViewModels.VmWithdraw>
+@{ 
+    Layout = null;
+    int sl = 0;
+}
+
+<div class="col-md-12 text-sm" style="overflow-y:scroll">
+    <table class="table table-bordered table-sm table-striped">
+        <thead class="btn-info" style="background-color:#552eb3">
+            <tr class="text-center">
+                <th style="vertical-align:middle">#SL</th>
+                <th class="hide"></th>
+                <th style="vertical-align:middle">Withdraw Amount</th>
+                <th style="vertical-align:middle">Remarks</th>
+                <th style="vertical-align:middle">Withdraw Date</th>
+                <th style="vertical-align:middle">EntryUser</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                sl = sl + 1;
+                string entryDate = item.EntryDate != null ? item.EntryDate.Value.ToString("dd-MMM-yyy") : "";
+                <tr>
+                    <td class="text-center">@sl</td>
+                    <td class="hide">@item.WithdrawId</td>
+                    <td class="text-right">@item.WithdrawAmount</td>
+                    <td>@item.Remarks</td>
+                    <td>@entryDate</td>
+                    <td>@item.EntryUser</td>
+                </tr>
+            }
+            @if (Model.Count() == 0)
+            {
+                <tr class="text-center empty-row">
+                    <td colspan="8">
+                        No Rows Found
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

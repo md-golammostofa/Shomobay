@@ -1,0 +1,43 @@
+﻿@model IEnumerable<HMSBO.ViewModels.VmInvestment>
+@{
+    Layout = null;
+    int sl = 0;
+}
+<div class="col-md-12 text-sm" style="overflow-y:scroll">
+    <table class="table table-bordered table-sm table-striped" id="tblMembers">
+        <thead class="btn-info" style="background-color:#552eb3">
+            <tr class="text-center">
+                <th style="vertical-align:middle">#SL</th>
+                <th class="hide"></th>
+                <th style="vertical-align:middle">Invest Date</th>
+                <th style="vertical-align:middle">Invest Amount</th>
+                <th style="vertical-align:middle">Remarks</th>
+                <th style="vertical-align:middle">Entry User</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                sl = sl + 1;
+                string investDate = item.InvestDate != null ? item.InvestDate.Value.ToString("dd-MMM-yyy") : "";
+                <tr>
+                    <td class="text-center">@sl</td>
+                    <td class="hide">@item.InvestmentId</td>
+                    <td>@investDate</td>
+                    <td class="text-right">@item.InvestAmount.ToString("0.00")</td>
+                    <td>@item.Remarks</td>
+                    <td>@item.EntryUser</td>
+                </tr>
+            }
+            @if (Model.Count() == 0)
+            {
+                <tr class="text-center empty-row">
+                    <td colspan="5">
+                        No Rows Found
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

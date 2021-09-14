@@ -1,0 +1,86 @@
+﻿
+@{
+    ViewBag.Title = "Savings Report";
+}
+
+<div class="row">
+    <div class="col-md-12 text-center">
+        <div class="card card-gray shadow">
+            <div class="card-header">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-4 text-left">
+                           
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <h4><b>Savings Report</b></h4>
+                        </div>
+                        <div class="col-md-4">
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow">
+            <div class="card-header">
+                @Html.AntiForgeryToken()
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group col-md-12">
+                            <label for="txtMemberCode" class="control-label font-weight-bold">Member Code</label>
+                            <input type="text" name="MemberCode" value="" id="txtMemberCode" class="form-control form-control-sm search-control" />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group col-md-12">
+                            <label for="txtMemberName" class="control-label font-weight-bold">Member Name</label>
+                            <input type="text" name="MemberName" value="" id="txtMemberName" class="form-control form-control-sm search-control" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12" id="dataContainer">
+        <div class="card shadow">
+            <div class="card-body">
+                @*@{Html.RenderAction("SavingsReport2", new { flag = "view" });}*@
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script type="text/javascript">
+        var txtMemberCode = $("#txtMemberCode");
+        var txtMemberName = $("#txtMemberName");
+
+        txtMemberCode.keyup(function () {
+            LoadDataTable();
+        });
+        txtMemberName.keyup(function () {
+            LoadDataTable();
+        })
+
+        function LoadDataTable() {
+            var data = { flag: "Search", mCode: txtMemberCode.val().trim(), mName: txtMemberName.val() };
+
+            //return console.log(data);
+            $.when(getReqWithData('html', 'GET', '/Shomobay/SavingsReport2', data)).then(function (res, status) {
+                console.log(status);
+                if (status === "success") {
+                    $("#dataContainer").fadeOut('500', function () {
+                        $("#dataContainer").empty();
+                        $("#dataContainer").append(res).fadeIn('500');
+                    });
+                }
+            }).fail(function (error) {
+                console.log(error);
+            });
+        }
+    </script>
+    }

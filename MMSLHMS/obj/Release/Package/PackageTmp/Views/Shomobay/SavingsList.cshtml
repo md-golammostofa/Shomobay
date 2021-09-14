@@ -1,0 +1,96 @@
+﻿
+@{
+    ViewBag.Title = "Savings";
+}
+
+<div class="row">
+    <div class="col-md-12 text-center">
+        <div class="card card-gray shadow">
+            <div class="card-header card-gray">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-4">
+
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <h4><b>Savings List</b></h4>
+                        </div>
+                        <div class="col-md-4">
+                            <a href="/Shomobay/CreateSavings" class="btn btn-outline-primary btn-sm float-lg-right" id="btnAddNew"><i class="fa fa-plus"></i> Add Savings</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="card">
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="form-group col-md-12">
+                        <label for="txtMemberCodeSearch" class="control-label font-weight-bold">Member Code</label>
+                        <input type="text" name="MemberCode" value="" id="txtMemberCodeSearch" placeholder="Search By Code" class="form-control form-control-sm search-control" />
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group col-md-12">
+                        <label for="txtMemberNameSearch" class="control-label font-weight-bold">Member Name</label>
+                        <input type="text" name="MemberName" value="" id="txtMemberNameSearch" placeholder="Search By Name" class="form-control form-control-sm search-control" />
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group col-md-12">
+                        <label for="txtMemberMobileSearch" class="control-label font-weight-bold">Member Mobile</label>
+                        <input type="text" name="MemberName" value="" id="txtMemberMobileSearch" placeholder="Search By Mobile" class="form-control form-control-sm search-control" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 text-sm" id="dataContainer">
+        @{Html.RenderAction("SavingsList", new { flag = "view" });}
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        var txtMemberCodeSearch = $("#txtMemberCodeSearch");
+        var txtMemberNameSearch = $("#txtMemberNameSearch");
+        var txtMemberMobileSearch = $("#txtMemberMobileSearch");
+
+        $("#btnCancel").click(function (e) {
+            e.preventDefault();
+            $("#modalMembers").modal("toggle");
+        })
+
+        txtMemberCodeSearch.keyup(function () {
+            LoadDataTable();
+        });
+        txtMemberNameSearch.keyup(function () {
+            LoadDataTable();
+        });
+        txtMemberMobileSearch.keyup(function () {
+            LoadDataTable();
+        });
+
+        function LoadDataTable() {
+            var data = { flag: "search", mCode: txtMemberCodeSearch.val().trim(), mName: txtMemberNameSearch.val().trim(), mMobile: txtMemberMobileSearch.val().trim() };
+
+            console.log(data);
+            $.when(getReqWithData('html', 'GET', '/Shomobay/SavingsList', data)).then(function (res, status) {
+                console.log(status);
+                if (status === "success") {
+                    $("#dataContainer").fadeOut('500', function () {
+                        $("#dataContainer").empty();
+                        $("#dataContainer").append(res).fadeIn('500');
+                    });
+                }
+            }).fail(function (error) {
+                console.log(error);
+            })
+        }
+    </script>
+    }

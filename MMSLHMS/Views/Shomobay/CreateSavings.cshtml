@@ -1,0 +1,217 @@
+﻿
+@{
+    ViewBag.Title = "Savings";
+}
+
+<div class="row">
+    <div class="col-md-12 text-center">
+        <div class="card card-gray shadow">
+            <div class="card-header">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-4 text-left">
+                            <a href="/Shomobay/SavingsList" class="btn btn-sm btn-outline-primary" title="Back To List"><i class="fas fa-arrow-alt-circle-left"></i></a>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <h4><b>Savings</b></h4>
+                        </div>
+                        <div class="col-md-4 hide">
+                            <button class="btn btn-outline-danger btn-sm float-lg-right" id="btnReset" title="RESET UI"><i class="fas fa-sync-alt"></i> </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow">
+            <div class="card-header">
+                @Html.AntiForgeryToken()
+                <div class="row text-sm">
+                    <div class="col-md-3">
+                        <label for="ddlMemberCode" class="control-label font-weight-bold">Member Code</label>
+                        @Html.DropDownList("ddlMemberCode", (IEnumerable<SelectListItem>)ViewBag.ddlMemberCode, "--Select Code--", new { @class = "form-control form-control-sm select2 select2-danger" })
+                        <span class="error hide require-memberCode font-weight-bold">Code is required !</span>
+                    </div>
+                </div>
+                <hr />
+                <div class="row text-sm">
+                    <div class="col-md-9">
+                        <div class="row text-sm">
+                            <div class="col-md-4">
+                                <div class="form-group col-md-12">
+                                    <label for="txtMemberName" class="control-label font-weight-bold">Member Name</label>
+                                    <input type="text" name="Member" value="" id="txtMemberName" class="form-control form-control-sm search-control" disabled />
+                                    <span class="error hide require-memberName font-weight-bold">Member is required !</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group col-md-12">
+                                    <label for="txtMemberAddress" class="control-label font-weight-bold">Member Address</label>
+                                    <input type="text" name="Address" value="" id="txtMemberAddress" class="form-control form-control-sm search-control" disabled />
+                                    <span class="error hide require-Address font-weight-bold">Address is required !</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group col-md-12">
+                                    <label for="txtMemberMobile" class="control-label font-weight-bold">Member Mobile</label>
+                                    <input type="text" name="mobile" value="" id="txtMemberMobile" class="form-control form-control-sm search-control" disabled />
+                                    <span class="error hide require-Mobile font-weight-bold">Mobile is required !</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group col-md-12">
+                                    <label for="txtSavingsAmount" class="control-label font-weight-bold">Amount</label>
+                                    <input type="number" name="amount" value="" id="txtSavingsAmount" class="form-control form-control-sm search-control" />
+                                    <span class="error hide require-savingsAmount font-weight-bold">Amount is required !</span>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group col-md-12">
+                                    <label for="dptSavingsDate" class="control-label font-weight-bold">Savings Date</label>
+                                    <input type="date" name="collectionDate" value="" id="dptSavingsDate" class="form-control form-control-sm search-control" />
+                                    <span class="error hide require-saveDate font-weight-bold">Date is required !</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group col-md-12">
+                                    <label for="txtRemarks" class="control-label font-weight-bold">Remarks</label>
+                                    <input type="text" name="remarks" value="" id="txtRemarks" class="form-control form-control-sm search-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-2 text-right">
+                                <label for="" class="control-label font-weight-bold" style="visibility:hidden"> Adddddddddddddddddddddd</label>
+                                <div class="clearfix">
+                                    <button type="submit" class="btn btn-sm btn-success float-lg-right mr-1" id="btnSubmit" title="Save"><i class="fas fa-plus"></i> Save</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <table class="table table-bordered table-sm table-striped" style="background-color:lightgoldenrodyellow">
+                            <thead class="btn-primary">
+                                <tr>
+                                    <th><b>Savings Information</b></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="color:blue">
+                                    <th>Total Saving Amount</th>
+                                    <th><span class="tblSaveAmount" id="tblSaveAmount">0</span></th>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script type="text/javascript">
+        var ddlMemberCode = $("#ddlMemberCode");
+        var txtMemberName = $("#txtMemberName");
+        var txtMemberAddress = $("#txtMemberAddress")
+        var txtMemberMobile = $("#txtMemberMobile")
+        var txtSavingsAmount = $("#txtSavingsAmount");
+        var dptSavingsDate = $("#dptSavingsDate");
+        var txtRemarks = $("#txtRemarks");
+        //
+        var tblSaveAmount = $("#tblSaveAmount");
+
+        document.getElementById('dptSavingsDate').valueAsDate = new Date();
+
+        ddlMemberCode.change(function () {
+            $("#txtMemberName").val('');
+            $("#txtMemberAddress").val('');
+            $("#txtMemberMobile").val('');
+            $("#tblSaveAmount").val('');
+            if (ddlMemberCode.val() != "") {
+                $.when(postReqWithToken(dataType.applicationJson, dataType.json, 'POST', '/Shomobay/GetSavingsInformation', JSON.stringify({ mcode: ddlMemberCode.val().trim() }), getToken())).then(function (res, status) {
+                    if (status == "success") {
+                        $("#txtMemberName").val(res.MemberName);
+                        $("#txtMemberAddress").val(res.MemberAddress);
+                        $("#txtMemberMobile").val(res.MemberMobile);
+                        $("#tblSaveAmount").text(res.TotalSavings);
+                    }
+
+                }).fail(function (error) {
+                    consoleLog(error);
+                })
+            }
+
+        });
+
+
+        function validateInput() {
+            $('.error').addClass('hide');
+            var isValid = true;
+            if ($.trim(ddlMemberCode.val()) == "") {
+                $(".require-memberCode").removeClass("hide");
+                isValid = false;
+            }
+            if ($.trim(txtMemberName.val()) == "") {
+                $(".require-memberName").removeClass("hide");
+                isValid = false;
+            }
+            if ($.trim(txtMemberMobile.val()) == "") {
+                $(".require-Mobile").removeClass("hide");
+                isValid = false;
+            }
+            if ($.trim(txtMemberAddress.val()) == "") {
+                $(".require-Address").removeClass("hide");
+                isValid = false;
+            }
+            if (TryParseFloat(txtSavingsAmount.val(), 0) <= 0) {
+                $(".require-savingsAmount").removeClass("hide");
+                isValid = false;
+            }
+            if ($.trim(dptSavingsDate.val()) == "") {
+                $(".require-saveDate").removeClass("hide");
+                isValid = false;
+            }
+            return isValid;
+        }
+
+        $("#btnSubmit").click(function (e) {
+            e.preventDefault();
+            $('.error').addClass('hide');
+            if (validateInput() == true) {
+                var save = {
+                    MemberCode: ddlMemberCode.val(),
+                    MemberName: txtMemberName.val(),
+                    MemberAddress: txtMemberAddress.val(),
+                    MemberMobile: txtMemberMobile.val(),
+                    SavingAmount: TryParseFloat(txtSavingsAmount.val(), 0),
+                    SavingDate: dptSavingsDate.val(),
+                    Remarks: txtRemarks.val(),
+                    }
+                var data = JSON.stringify({ model: save });
+                    //return console.log(data);
+                    $.when(postReqWithToken(dataType.applicationJson, dataType.json, 'POST', '/Shomobay/SaveSavingsAmount', data, getToken())).then(function (res, status) {
+                        if (res == true) {
+                            alert(execuStatus.successSave);
+
+                                setTimeout(function () {
+                                    redirectPage('@Url.Action("SavingsList")');
+                                }, 1000);
+                            }
+                            else {
+                            alert(execuStatus.fail);
+                            }
+                    }).fail(function (err) {
+                        alert(execuStatus.fail);
+                    })
+                }
+        });
+
+        function redirectPage(page) {
+            window.location.replace(page);
+        }
+    </script>
+}

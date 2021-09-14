@@ -1,0 +1,479 @@
+﻿
+@{
+    ViewBag.Title = "Members";
+}
+<div class="row">
+    <div class="col-md-12 text-center">
+        <div class="card card-gray shadow" >
+            <div class="card-header card-gray">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-4">
+
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <h4><b>Member List</b></h4>
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-primary btn-sm float-right" id="btnAddNew"><i class="fa fa-plus"></i> Create New Member</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="card">
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="form-group col-md-12">
+                        <label for="txtMemberCodeSearch" class="control-label font-weight-bold">Member Code</label>
+                        <input type="text" name="MemberCode" value="" placeholder="Search By Code" id="txtMemberCodeSearch" class="form-control form-control-sm search-control" />
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group col-md-12">
+                        <label for="txtMemberNameSearch" class="control-label font-weight-bold">Member Name</label>
+                        <input type="text" name="MemberName" value="" placeholder="Search By Name" id="txtMemberNameSearch" class="form-control form-control-sm search-control" />
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group col-md-12">
+                        <label for="txtMemberMobileSearch" class="control-label font-weight-bold">Member Mobile</label>
+                        <input type="text" name="MemberName" value="" placeholder="Search By Mobile" id="txtMemberMobileSearch" class="form-control form-control-sm search-control" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 text-sm" id="dataContainer">
+        @{Html.RenderAction("MemberList", new { flag = "view" });}
+    </div>
+</div>
+
+<div class="modal fade" id="modalMembers">
+    <div class="modal-dialog">
+        <div class="modal-content ">
+            <div class="modal-header  btn-success">
+                <h4 class="modal-title" id="modalHeading">Create New Members</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <form id="frmInv" autocomplete="off">
+                <input type="hidden" id="hdfMemberId" value="0" />
+                @Html.AntiForgeryToken()
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label class="control-label col-md-12 font-weight-bold" for="">Member Name<span class="text-danger">*</span></label>
+                            <div class="col-md-12 input-group">
+                                <input type="text" id="txtMemberName" name="Member" class="form-control form-control-sm" />
+                            </div>
+                            <span class="error hide required-member">Member is required</span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label class="control-label col-md-12 font-weight-bold" for="">Member NID<span class="text-danger">*</span></label>
+                            <div class="col-md-12 input-group">
+                                <input type="number" id="txtNIDNumber" name="NID" class="form-control form-control-sm" />
+                            </div>
+                            <span class="error hide required-nidNumber">NID is required !</span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label class="control-label col-md-12 font-weight-bold" for="">Member Address</label>
+                            <div class="col-md-12 input-group">
+                                <input type="text" id="txtMemberAddress" name="Address" class="form-control form-control-sm" />
+                            </div>
+                            <span class="error hide required-address">Member Address is required</span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label class="control-label col-md-12 font-weight-bold" for="">Member Mobile<span class="text-danger">*</span></label>
+                            <div class="col-md-12 input-group">
+                                <input type="text" id="txtMemberMobile" name="Address" class="form-control form-control-sm" />
+                            </div>
+                            <span class="error hide required-mobile">Member Mobile is required</span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label class="control-label col-md-12 font-weight-bold" for="">Remarks</label>
+                            <div class="col-md-12 input-group">
+                                <input type="text" id="txtRemarks" name="remarks" class="form-control form-control-sm" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-8">
+                            <label class="control-label font-weight-bold col-md-12">Member Image</label>
+                            <div class="col-md-12">
+                                <input type="file" name="MemberLogo" class="form-control" id="MemberLogo" />
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="control-label font-weight-bold col-md-12" style="visibility:hidden">Member Image</label>
+                            <div class="col-md-12">
+                                <img src="#" alt="Member Image" title="Member Image" id="imgMem" width="120" height="120" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-danger" id="btnCancel" title="Cancel the process"><i></i> Cancel </button>
+                        <button type="submit" id="btnSubmit" class="btn btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalImage">
+    <div class="modal-dialog">
+        <div class="modal-content modal-sm">
+            <div class="modal-header  btn-success">
+                <h4 class="modal-title" id="modalHeading">Member Image</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <form id="frmInv" autocomplete="off">
+                <input type="hidden" id="hdfMemberId" value="0" />
+                @Html.AntiForgeryToken()
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group col-md-8 hide">
+                            <label class="control-label font-weight-bold col-md-12">Member Image</label>
+                            <div class="col-md-12">
+                                <input type="file" name="MemberLogo2" class="form-control" id="MemberLogo2" />
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="control-label font-weight-bold col-md-12" style="visibility:hidden">Member Image</label>
+                            <div class="col-md-12">
+                                <img src="#" alt="Member Image" title="Member Image" id="imgMem2" width="200" height="200" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-danger" id="btnCancel2" title="Cancel the process"><i></i> Cancel </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalMemberStatus" role="dialog" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header alert-secondary" style="height:60px">
+                <input type="hidden" id="hdfMemberId" />
+                <h4 id="modalHeading" class="modal-title"><span id="spanModalHead">Member Status Update</span></h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <form id="frmInvoice">
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="ddlMemberStatus" class="control-label font-weight-bold">Member Status</label>
+                            <select id="ddlMemberStatus" name="docType" class="form-control form-control-sm search-control">
+                                <option value="">--Selecet One--</option>
+                                <option value="InActive" selected>InActive</option>
+
+                            </select>
+                            <span class="error hide required-MemberStatus font-weight-bold">Status Required !</span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer btn-light">
+                <div class="col-md-6">
+                    <div id="msg1" class="alert alert-success hide float-left">
+                        Data has been saved Successful!
+                    </div>
+                    <div id="msg2" class="alert alert-danger hide float-left">
+                        Data has been failed to save!
+                    </div>
+                </div>
+                <button type="button" class="btn btn-sm btn-danger float-right" data-dismiss="modal" data-target="#"><i class="fas fa-times"></i> Cancel </button>
+                <button type="submit" class="btn btn-sm btn-success float-right" id="btnStatusSubmit"><i class="far fa-save"></i> <span id="spanSaveText">Save </span> </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+
+        var hdfMemberId = $("#hdfMemberId");
+        var txtMemberName = $("#txtMemberName");
+        var txtMemberAddress = $("#txtMemberAddress");
+        var txtMemberMobile = $("#txtMemberMobile");
+        var txtRemarks = $("#txtRemarks");
+        var txtNIDNumber = $("#txtNIDNumber");
+        var MemberLogo = $("#MemberLogo");
+        //
+        var txtMemberCodeSearch = $("#txtMemberCodeSearch");
+        var txtMemberNameSearch = $("#txtMemberNameSearch");
+        var txtMemberMobileSearch = $("#txtMemberMobileSearch");
+        //
+        var ddlMemberStatus = $("#ddlMemberStatus");
+        var hdfMemberId = $("#hdfMemberId");
+
+        $("#btnCancel").click(function (e) {
+            e.preventDefault();
+            $("#modalMembers").modal("toggle");
+        })
+        $("#btnCancel2").click(function (e) {
+            e.preventDefault();
+            $("#modalImage").modal("toggle");
+        })
+
+        txtMemberCodeSearch.keyup(function () {
+            LoadDataTable();
+        });
+        txtMemberNameSearch.keyup(function () {
+            LoadDataTable();
+        });
+        txtMemberMobileSearch.keyup(function () {
+            LoadDataTable();
+        });
+
+        function LoadDataTable() {
+            var data = { flag: "search", mCode: txtMemberCodeSearch.val().trim(), mName: txtMemberNameSearch.val().trim(), mMobile: txtMemberMobileSearch.val().trim() };
+
+            console.log(data);
+            $.when(getReqWithData('html', 'GET', '/Shomobay/MemberList', data)).then(function (res, status) {
+                console.log(status);
+                if (status === "success") {
+                    $("#dataContainer").fadeOut('500', function () {
+                        $("#dataContainer").empty();
+                        $("#dataContainer").append(res).fadeIn('500');
+                    });
+                }
+            }).fail(function (error) {
+                console.log(error);
+            })
+        }
+
+        function OpenModal() {
+            clrCtrl();
+            $(".error").addClass("hide");
+            $("#modalHeading").text('Create New Member');
+            $("#btnSubmit").text('Save');
+            $("#modalMembers").modal();
+            $("#imgMem").attr("src", "/Images/no_image.png");//
+        }
+        function OpenModalImg() {
+            $(".error").addClass("hide");
+            $("#modalImage").modal();
+            $("#imgMem").attr("src", "/Images/no_image.png");
+        }
+
+        $("#btnAddNew").click(function (e) {
+            e.preventDefault();
+            OpenModal();
+        })
+
+        function clrCtrl() {
+            txtMemberName.val('');
+            txtMemberMobile.val('');
+            txtMemberAddress.val('');
+            hdfMemberId.val('0');
+            txtNIDNumber.val('');
+            txtRemarks.val('');
+        }
+
+        function validation() {
+            var isValid = true;
+            $(".error").addClass('hide');
+            if (txtMemberName.val().trim() == '') {
+                isValid = false;
+                $(".required-member").removeClass("hide");
+            }
+            if (txtMemberMobile.val().trim() == '') {
+                isValid = false;
+                $(".required-mobile").removeClass("hide");
+            }
+            if (txtNIDNumber.val().trim() == '') {
+                isValid = false;
+                $(".required-nidNumber").removeClass("hide");
+            }
+            return isValid;
+        }
+
+        //$("#btnSubmit").click(function (e) {
+        //    e.preventDefault();
+        //    var memImage = $('#MemberLogo').prop('files')[0];
+        //    //console.log("File");
+        //    //return console.log(memImage);
+        //    if (validation()) {
+        //        var id = hdfMemberId.val() == "" ? "0" : hdfMemberId.val();
+        //        var data = { MemberId: id, MemberName: txtMemberName.val(), MemberAddress: txtMemberAddress.val(), MemberMobile: txtMemberMobile.val(), Remarks: txtRemarks.val(), NIDNumber: txtNIDNumber.val(), MemImage: MemberLogo.prop('files')[0] };
+        //        data = JSON.stringify(data);
+        //        return console.log(data);
+
+        //        $.when(postReqWithToken(dataType.applicationJson, dataType.json, 'POST', '/Shomobay/SaveMember', data, getToken())).then(function (res, status) {
+        //            if (res) {
+        //                clrCtrl();
+        //                alert(execuStatus.successSave);
+        //                $("#modalMembers").modal("toggle");
+        //                LoadDataTable();
+        //            }
+        //            else {
+        //                alert(execuStatus.fail);
+        //            }
+        //            //alert(res);
+        //        }).fail(function (err) {
+        //            alert(execuStatus.fail);
+        //        })
+        //    }
+        //})
+        $("#btnSubmit").click(function (e) {
+            e.preventDefault();
+
+            var memImage = $('#MemberLogo').prop('files')[0];
+            console.log(memImage);
+
+            if (validation() == true) {
+                var id = hdfMemberId.val() == "" ? "0" : hdfMemberId.val();
+                var formData = new FormData();
+                formData.append("MemberId", id);
+                formData.append("MemberName", txtMemberName.val());
+                formData.append("MemberAddress", txtMemberAddress.val());
+                formData.append("MemberMobile", txtMemberMobile.val());
+                formData.append("Remarks", txtRemarks.val());
+                formData.append("NIDNumber", txtNIDNumber.val());
+                formData.append("MemImage", memImage);
+
+                $.when(SaveData(formData)).then(function (res) {
+                    console.log(res);
+                }).fail(function (err) {
+                    console.log(err);
+                })
+            }
+
+        })
+        function SaveData(data) {
+            return $.ajax({
+                //contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                method: 'POST',
+                url: '/Shomobay/SaveMember',
+                data: data,
+                processData: false,
+                contentType: false,
+                headers: getToken(),
+                success: function (result) {
+                    if (result == true) {
+                        clrCtrl();
+                        alert(execuStatus.successSave);
+                        $("#modal").hide();
+                        $("#modalMembers").modal("toggle");
+                        LoadDataTable();
+                        location.reload();
+                    }
+                    else {
+                        alert(execuStatus.fail)
+                    }
+                },
+                error: function (result) {
+                    console.log(result);
+                }
+            });
+        }
+
+        function OpenModalStatus() {
+            $("#modalMemberStatus").modal("show");
+            $(".error").addClass("hide");
+        }
+        $(document).on('click', '.data-item-edit', function (e) {
+            var id = $(this).attr("data-item-edit");
+            hdfMemberId.val(id);
+            e.preventDefault();
+            OpenModalStatus();
+        })
+
+        $("#btnStatusSubmit").click(function (e) {
+            e.preventDefault();
+            $(".error").addClass("hide");
+            var data = JSON.stringify({ memberId: TryParseInt(hdfMemberId.val(), 0), status: ddlMemberStatus.val() });
+                    console.log(data);
+                    //return console.log(data)
+                    $.when(postReqWithToken(dataType.applicationJson, dataType.json, 'POST', '/Shomobay/UpdateMemberStatus', data, getToken())).then(function (res, status) {
+                        console.log(res);
+                        console.log(status);
+                        // enable("#btnSubmit");
+                        if (res == true) {
+                            alert(execuStatus.successSave);
+
+                                setTimeout(function () {
+                                    redirectPage('@Url.Action("MemberList")');
+                                }, 1000);
+                            }
+                            else {
+                            alert(execuStatus.fail);
+                            }
+                    }).fail(function (error) {
+                        console.log(error);
+                    })
+        });
+
+        //view
+        $(document).on('click', 'a.data-item-view', function (e) {
+            e.preventDefault();
+
+            var id = $(this).parent().parents('tr').find('td:eq(1)').html();
+
+            OpenModalImg();
+            hdfMemberId.val(id);
+            var data = JSON.stringify({ memId: id });
+            //return console.log(data);
+            $.when(postReqWithToken(dataType.applicationJson, dataType.json, 'POST', '/Shomobay/GetImageBase64String', data, getToken())).then(function (res, status) {
+                //console.log(res);
+                //console.log(status);
+                if (res.memberImg == "") {
+                    $("#imgMem2").attr("src", "/Images/no_image.png");
+                } else {
+                    $("#imgMem2").attr("src", res.memberImg);
+                }
+            }).fail(function (err) {
+                console.log(err);
+            })
+        })
+
+
+        $("#MemberLogo").change(function () {
+            readImg(this);
+        })
+
+        function readImg(file) {
+            console.log(file.id);
+            if (file.files && file.files[0] && file.files[0].name != '') {
+                var reader = new FileReader();
+                //console.log("Img File");
+                reader.onload = function (e) {
+                    //console.log(e.target.result);
+                    if (file.id == "MemberLogo") {
+                        $("#imgMem").attr("src", e.target.result);
+                    }
+
+                }
+                reader.readAsDataURL(file.files[0]);
+            }
+            else {
+                if (file.id == "MemberLogo") {
+                    $("#imgMem").attr("src", "/Images/no_image.png");
+                }
+            }
+        }
+
+        function redirectPage(page) {
+            window.location.replace(page);
+        }
+    </script>
+}

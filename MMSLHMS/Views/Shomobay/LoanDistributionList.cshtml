@@ -1,0 +1,222 @@
+﻿
+@{
+    ViewBag.Title = "LoanDistributionList";
+}
+
+<div class="row">
+    <div class="col-md-12 text-center">
+        <div class="card card-gray shadow">
+            <div class="card-header card-gray">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-4">
+
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <h4><b>Loan Distribution List</b></h4>
+                        </div>
+                        <div class="col-md-4">
+                            <a href="/Shomobay/CreateLoanDistribution" class="btn btn-outline-primary btn-sm float-lg-right" id="btnAddNew"><i class="fa fa-plus"></i> Create New Loan</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="card">
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="form-group col-md-12">
+                        <label for="txtMemberCode" class="control-label font-weight-bold">Member Code</label>
+                        <input type="text" name="MemberCode" value="" id="txtMemberCode" placeholder="Search By Code" class="form-control form-control-sm search-control" />
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group col-md-12">
+                        <label for="txtLoanCode" class="control-label font-weight-bold">Loan Code</label>
+                        <input type="text" name="LoanCode" value="" id="txtLoanCode" placeholder="Search By Loan" class="form-control form-control-sm search-control" />
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group col-md-12">
+                        <label for="txtMemberName" class="control-label font-weight-bold">Member Name</label>
+                        <input type="text" name="MemberName" value="" id="txtMemberName" placeholder="Search By Name" class="form-control form-control-sm search-control" />
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group col-md-12">
+                        <label for="txtMemberMobile" class="control-label font-weight-bold">Member Mobile</label>
+                        <input type="text" name="MemberName" value="" id="txtMemberMobile" placeholder="Search By Mobile" class="form-control form-control-sm search-control" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 text-sm" id="dataContainer">
+        @{Html.RenderAction("LoanDistributionList", new { flag = "view" });}
+    </div>
+</div>
+
+<div class="modal fade" id="modalLoanDetails" role="dialog" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header alert-secondary" style="height:60px">
+                @Html.AntiForgeryToken()
+                <h4 id="modalHeading" class="modal-title">Loan Information</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body" id="dataContainer2">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalLoanStatus" role="dialog" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header alert-secondary" style="height:60px">
+                <input type="hidden" id="hdfLoanId" />
+                <h4 id="modalHeading" class="modal-title"><span id="spanModalHead">Loan Status Update</span></h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <form id="frmInvoice">
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="ddlLoanStatus" class="control-label font-weight-bold">Loan Status</label>
+                            <select id="ddlLoanStatus" name="docType" class="form-control form-control-sm search-control">
+                                <option value="">--Selecet One--</option>
+                                <option value="Close" selected>Close</option>
+                                
+                            </select>
+                            <span class="error hide required-ServiceName font-weight-bold">Status Required !</span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer btn-light">
+                <div class="col-md-6">
+                    <div id="msg1" class="alert alert-success hide float-left">
+                        Data has been saved Successful!
+                    </div>
+                    <div id="msg2" class="alert alert-danger hide float-left">
+                        Data has been failed to save!
+                    </div>
+                </div>
+                <button type="button" class="btn btn-sm btn-danger float-right" data-dismiss="modal" data-target="#"><i class="fas fa-times"></i> Cancel </button>
+                <button type="submit" class="btn btn-sm btn-success float-right" id="btnStatusSubmit"><i class="far fa-save"></i> <span id="spanSaveText">Save </span> </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+
+        var ddlLoanStatus = $("#ddlLoanStatus");
+        var hdfLoanId = $("#hdfLoanId");
+        var txtMemberCode = $("#txtMemberCode");
+        var txtLoanCode = $("#txtLoanCode");
+        var txtMemberName = $("#txtMemberName");
+        var txtMemberMobile = $("#txtMemberMobile");
+
+
+        txtMemberCode.keyup(function () {
+            LoadDataTable();
+        })
+
+        txtLoanCode.keyup(function () {
+            LoadDataTable();
+        })
+        txtMemberName.keyup(function () {
+            LoadDataTable();
+        })
+        txtMemberMobile.keyup(function () {
+            LoadDataTable();
+        })
+        function LoadDataTable() {
+            var data = { flag: "search", mCode: txtMemberCode.val().trim(), lCode: txtLoanCode.val().trim(), mName: txtMemberName.val().trim(), mMobile: txtMemberMobile.val().trim() };
+
+            //return console.log(data);
+            $.when(getReqWithData('html', 'GET', '/Shomobay/LoanDistributionList', data)).then(function (res, status) {
+                console.log(status);
+                if (status === "success") {
+                    $("#dataContainer").fadeOut('500', function () {
+                        $("#dataContainer").empty();
+                        $("#dataContainer").append(res).fadeIn('500');
+                    });
+                }
+            }).fail(function (error) {
+                console.log(error);
+            });
+        }
+
+        $(document).on('click', 'a.data-item-details', function (e) {
+            e.preventDefault();
+            var lcode = $(this).attr("data-item-details");
+            getLoanDetail(lcode);
+        })
+
+        function getLoanDetail(lcode) {
+            if (lcode != null) {
+                var data = {lcode: lcode };
+                //return console.log(data);
+                $.when(getReqWithData('html', 'GET', '/Shomobay/GetLoanDetails', data)).then(function (res, status) {
+                    console.log(status);
+                    if (status === "success") {
+                        $("#dataContainer2").empty();
+                        $("#dataContainer2").append(res).fadeIn('500');
+                        $("#modalLoanDetails").modal("show");
+                    }
+                }).fail(function (error) {
+                    console.log(error);
+                });
+            }
+        }
+
+
+        function OpenModal() {
+            $("#modalLoanStatus").modal("show");
+            $(".error").addClass("hide");
+        }
+        $(document).on('click', '.data-item-edit', function (e) {
+            var id = $(this).attr("data-item-edit");
+            hdfLoanId.val(id);
+            e.preventDefault();
+            OpenModal();
+        })
+        $("#btnStatusSubmit").click(function (e) {
+            e.preventDefault();
+            $(".error").addClass("hide");
+            var data = JSON.stringify({ loanId: TryParseInt(hdfLoanId.val(),0), loanstatus: ddlLoanStatus.val() });
+                    console.log(data);
+                    //return console.log(data)
+                    $.when(postReqWithToken(dataType.applicationJson, dataType.json, 'POST', '/Shomobay/UpdateLoanStatus', data, getToken())).then(function (res, status) {
+                        console.log(res);
+                        console.log(status);
+                        // enable("#btnSubmit");
+                        if (res == true) {
+                            alert(execuStatus.successSave);
+
+                                setTimeout(function () {
+                                    redirectPage('@Url.Action("LoanDistributionList")');
+                                }, 1000);
+                            }
+                            else {
+                            alert(execuStatus.fail);
+                            }
+                    }).fail(function (error) {
+                        console.log(error);
+                    })
+        });
+
+        function redirectPage(page) {
+            window.location.replace(page);
+        }
+    </script>
+    }

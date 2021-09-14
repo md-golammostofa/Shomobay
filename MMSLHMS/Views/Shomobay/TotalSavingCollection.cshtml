@@ -1,0 +1,136 @@
+﻿
+@{
+    ViewBag.Title = "TotalSavingCollection";
+}
+
+<div class="row">
+    <div class="col-md-12 text-center">
+        <div class="card card-gray shadow">
+            <div class="card-header card-gray">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-3">
+
+                        </div>
+                        <div class="col-md-6 text-center">
+                            <h4><b>Total Savings Collection Report</b></h4>
+                        </div>
+                        <div class="col-md-3">
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-12">
+                @using (Html.BeginForm("TotalSavingsCollectionReport", "Shomobay", FormMethod.Get, new { @target = "_blank" }))
+                {
+                    <form method="get">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="form-group col-md-12">
+                                        <label for="txtMemberCodeSearch" class="control-label font-weight-bold">Member Code</label>
+                                        <input type="text" name="mCode" value="" id="txtMemberCodeSearch" placeholder="Search By Code" class="form-control form-control-sm search-control" />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group col-md-12">
+                                        <label for="txtMemberNameSearch" class="control-label font-weight-bold">Member Name</label>
+                                        <input type="text" name="mName" value="" id="txtMemberNameSearch" placeholder="Search By Name" class="form-control form-control-sm search-control" />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group col-md-12">
+                                        <label for="txtMemberMobileSearch" class="control-label font-weight-bold">Member Mobile</label>
+                                        <input type="text" name="mMobile" value="" id="txtMemberMobileSearch" placeholder="Search By Mobile" class="form-control form-control-sm search-control" />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group col-md-12">
+                                        <label for="dptFromDate" class="control-label font-weight-bold">From Date</label>
+                                        <input type="date" name="fromDate" value="" id="dptFromDate"  class="form-control form-control-sm search-control" />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group col-md-12">
+                                        <label for="dptToDate" class="control-label font-weight-bold">To Date</label>
+                                        <input type="date" name="fromDate" value="" id="dptToDate" class="form-control form-control-sm search-control" />
+                                    </div>
+                                </div>
+                                <div class="col-md-1" id="divReportType">
+                                    <label class="control-label font-weight-bold" for="rptType">Type</label>
+                                    <select name="rptType" id="rptType" class="form-control form-control-sm">
+                                        <option value="PDF">PDF</option>
+                                        <option value="EXCEL">EXCEL</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-1" id="divbtnReport">
+                                    <label class="control-label font-weight-bold" for="Download" style="visibility:hidden">Download</label>
+                                    <button type="submit" title="Download Loan Report" class="btn btn-sm btn-outline-danger"><i class="fas fa-file-pdf"> </i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 text-sm" id="dataContainer">
+        @{Html.RenderAction("TotalSavingCollection", new { flag = "view" });}
+    </div>
+</div>
+@section Scripts{
+    <script type="text/javascript">
+
+        var txtMemberCodeSearch = $("#txtMemberCodeSearch");
+        var txtMemberNameSearch = $("#txtMemberNameSearch");
+        var txtMemberMobileSearch = $("#txtMemberMobileSearch");
+        var dptFromDate = $("#dptFromDate");
+        var dptToDate = $("#dptToDate");
+
+        $("#btnCancel").click(function (e) {
+            e.preventDefault();
+            $("#modalMembers").modal("toggle");
+        })
+
+        txtMemberCodeSearch.keyup(function () {
+            LoadDataTable();
+        });
+        txtMemberNameSearch.keyup(function () {
+            LoadDataTable();
+        });
+        txtMemberMobileSearch.keyup(function () {
+            LoadDataTable();
+        });
+        dptFromDate.change(function () {
+            LoadDataTable();
+        });
+        dptToDate.change(function () {
+            LoadDataTable();
+        })
+
+        function LoadDataTable() {
+            var data = { flag: "search", mCode: txtMemberCodeSearch.val().trim(), mName: txtMemberNameSearch.val().trim(), mMobile: txtMemberMobileSearch.val().trim(), fromDate: dptFromDate.val(), toDate: dptToDate.val() };
+
+            console.log(data);
+            $.when(getReqWithData('html', 'GET', '/Shomobay/TotalSavingCollection', data)).then(function (res, status) {
+                console.log(status);
+                if (status === "success") {
+                    $("#dataContainer").fadeOut('500', function () {
+                        $("#dataContainer").empty();
+                        $("#dataContainer").append(res).fadeIn('500');
+                    });
+                }
+            }).fail(function (error) {
+                console.log(error);
+            })
+        }
+    </script>
+    }

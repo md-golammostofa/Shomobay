@@ -1,0 +1,54 @@
+﻿@model IEnumerable<HMSBO.ViewModels.VmLoanAdjustment>
+@{
+    Layout = null;
+    int sl = 0;
+}
+<div class="col-md-12 text-sm" style="overflow-y:scroll">
+    <table class="table table-bordered table-sm table-striped" id="tblSavingsList">
+        <thead class="btn-info" style="background-color:#552eb3">
+            <tr class="text-center">
+                <th style="vertical-align:middle">#SL</th>
+                <th class="hide"></th>
+                <th style="vertical-align:middle">Adjustment Date</th>
+                <th style="vertical-align:middle">Loan Code</th>
+                <th style="vertical-align:middle">Member Code</th>
+                <th style="vertical-align:middle">Member Name</th>
+                <th style="vertical-align:middle">Address</th>
+                <th style="vertical-align:middle">Mobile No</th>
+                <th style="vertical-align:middle">Adjustment Amount</th>
+                <th style="vertical-align:middle">Remarks</th>
+                <th style="vertical-align:middle">Entry User</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                sl = sl + 1;
+                string adjustmentDate = item.AdjustmentDate != null ? item.AdjustmentDate.Value.ToString("dd-MMM-yyy") : "";
+                <tr>
+                    <td class="text-center">@sl</td>
+                    <td class="hide">@item.LAdjId</td>
+                    <td>@adjustmentDate</td>
+                    <td>@item.LDisCode</td>
+                    <td>@item.MemberCode</td>
+                    <td>@item.MemberName</td>
+                    <td>@item.MemberAddress</td>
+                    <td>@item.MemberMobile</td>
+                    <td class="text-right">@item.AdjustmentAmount.ToString("0.00")</td>
+                    <td>@item.Remarks</td>
+                    <td>@item.EntryUser</td>
+                </tr>
+            }
+            @if (Model.Count() == 0)
+            {
+                <tr class="text-center empty-row">
+                    <td colspan="10">
+                        No Rows Found
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
