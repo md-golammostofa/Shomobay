@@ -46,3 +46,9 @@ E:\Shomobay\Diagnostic Management System_19-Mar-2020\Diagnostic Management Syste
 E:\Shomobay\Diagnostic Management System_19-Mar-2020\Diagnostic Management System\MMSLHMS\HMSBO\obj\Debug\HMSBO.csproj.CoreCompileInputs.cache
 E:\Shomobay\Diagnostic Management System_19-Mar-2020\Diagnostic Management System\MMSLHMS\HMSBO\obj\Debug\HMSBO.dll
 E:\Shomobay\Diagnostic Management System_19-Mar-2020\Diagnostic Management System\MMSLHMS\HMSBO\obj\Debug\HMSBO.pdb
+E:\GITHUBALLPROJECT\Shomobay\HMSBO\bin\Debug\HMSBO.dll
+E:\GITHUBALLPROJECT\Shomobay\HMSBO\bin\Debug\HMSBO.pdb
+E:\GITHUBALLPROJECT\Shomobay\HMSBO\obj\Debug\HMSBO.csprojAssemblyReference.cache
+E:\GITHUBALLPROJECT\Shomobay\HMSBO\obj\Debug\HMSBO.csproj.CoreCompileInputs.cache
+E:\GITHUBALLPROJECT\Shomobay\HMSBO\obj\Debug\HMSBO.dll
+E:\GITHUBALLPROJECT\Shomobay\HMSBO\obj\Debug\HMSBO.pdb

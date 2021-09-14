@@ -79,3 +79,12 @@ E:\Shomobay\Diagnostic Management System_19-Mar-2020\Diagnostic Management Syste
 E:\Shomobay\Diagnostic Management System_19-Mar-2020\Diagnostic Management System\MMSLHMS\HMSBLL\obj\Debug\netstandard2.0\HMSBLL.AssemblyInfo.cs
 E:\Shomobay\Diagnostic Management System_19-Mar-2020\Diagnostic Management System\MMSLHMS\HMSBLL\obj\Debug\netstandard2.0\HMSBLL.dll
 E:\Shomobay\Diagnostic Management System_19-Mar-2020\Diagnostic Management System\MMSLHMS\HMSBLL\obj\Debug\netstandard2.0\HMSBLL.pdb
+E:\GITHUBALLPROJECT\Shomobay\HMSBLL\bin\Debug\netstandard2.0\HMSBLL.deps.json
+E:\GITHUBALLPROJECT\Shomobay\HMSBLL\bin\Debug\netstandard2.0\HMSBLL.dll
+E:\GITHUBALLPROJECT\Shomobay\HMSBLL\bin\Debug\netstandard2.0\HMSBLL.pdb
+E:\GITHUBALLPROJECT\Shomobay\HMSBLL\obj\Debug\netstandard2.0\HMSBLL.csprojAssemblyReference.cache
+E:\GITHUBALLPROJECT\Shomobay\HMSBLL\obj\Debug\netstandard2.0\HMSBLL.csproj.CoreCompileInputs.cache
+E:\GITHUBALLPROJECT\Shomobay\HMSBLL\obj\Debug\netstandard2.0\HMSBLL.AssemblyInfoInputs.cache
+E:\GITHUBALLPROJECT\Shomobay\HMSBLL\obj\Debug\netstandard2.0\HMSBLL.AssemblyInfo.cs
+E:\GITHUBALLPROJECT\Shomobay\HMSBLL\obj\Debug\netstandard2.0\HMSBLL.dll
+E:\GITHUBALLPROJECT\Shomobay\HMSBLL\obj\Debug\netstandard2.0\HMSBLL.pdb
